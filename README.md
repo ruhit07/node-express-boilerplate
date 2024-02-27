@@ -56,7 +56,7 @@ MONGO_URI = mongodb://localhost:27017/test
 
 JWT_SECRET=gsdhgfhdgshgh4g54b5s4fg5
 JWT_EXPIRE=1d
-JWT_COOKIE_EXPIRE=1d
+JWT_COOKIE_EXPIRE=1
 ```
 
 ## Project Structure

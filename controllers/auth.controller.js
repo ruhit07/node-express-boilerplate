@@ -1,6 +1,6 @@
 const asyncHandler=require("../middleware/async");
 const User =require("../model/user.model");
-const ErrorResponse = require("../utilis/errorResponse");
+const ErrorResponse = require("../utils/errorResponse");
 const crypto = require("crypto");
 
 

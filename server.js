@@ -1,20 +1,18 @@
-const express = require("express");
-const dotenv = require("dotenv");
-const morgan = require("morgan");
-const colors = require("colors");
-const cookieParser=require("cookie-parser");
-const mongoSanitize = require('express-mongo-sanitize');
-const helmet = require("helmet");
-const rateLimit = require("express-rate-limit");
+require('colors');
 const hpp = require("hpp");
 const cors = require("cors");
+const helmet = require("helmet");
+const morgan = require("morgan");
+const express = require("express");
+const cookieParser=require("cookie-parser");
+const rateLimit = require("express-rate-limit");
+const mongoSanitize = require('express-mongo-sanitize');
+
 const errorHandelar = require("./middleware/error");
 const connectDB = require("./config/db");
+const config = require('./config/config');
 
 const app = express();
-
-// Load env vars
-dotenv.config({path : "./config/config.env"});
 
 // Connect To Database
 connectDB();
@@ -22,9 +20,8 @@ connectDB();
 //Route Files
 const mountRoute = require('./routes/routes');
 
-
 // Dev loggin middleware
-if(process.env.NODE_ENV === "development"){
+if(config.NODE_ENV === "development"){
   app.use(morgan("dev"));
 };
 
@@ -50,11 +47,11 @@ mountRoute(app);
 // custom errorHandler Middle
 app.use(errorHandelar);
 
-const PORT = process.env.PORT || 5000;
+const PORT = config.PORT || 5000;
 
 // server Create
 const server = app.listen(PORT , () =>{
-  console.log(`Server Running In ${process.env.NODE_ENV} On ${PORT}`.yellow.bold);
+  console.log(`Server running in ${config.NODE_ENV} mode on port ${PORT}`.cyan.bold);
 });
 
 
