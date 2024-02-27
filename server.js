@@ -5,7 +5,6 @@ const colors = require("colors");
 const cookieParser=require("cookie-parser");
 const mongoSanitize = require('express-mongo-sanitize');
 const helmet = require("helmet");
-const xss = require("xss-clean");
 const rateLimit = require("express-rate-limit");
 const hpp = require("hpp");
 const cors = require("cors");
@@ -40,7 +39,6 @@ app.use(express.json());   //Body parser
 app.use(cookieParser());   //Cookie parser 
 app.use(mongoSanitize());  //Sanitize Data
 app.use(helmet());         //Set secutity Headers
-app.use(xss());            //Pevent XSS attacks
 app.use(hpp());            //Prevent http param pollution
 app.use(limiter);          //Rate limiting
 app.use(cors());           //Enable Cors

@@ -1,34 +1,37 @@
 {
-  "name": "brad-node",
+  "name": "node-express-boilerplate",
   "version": "1.0.0",
-  "description": "",
+  "author": "Ruhit Hassan",
+  "description": "Backend APIs development with Node.js, Express.js and MongoDB",
   "main": "server.js",
-  "scripts": {
-    "client-install": "npm install --prefix client",
-    "test": "echo \"Error: no test specified\" && exit 1",
-    "start": "NODE_ENV = production node server",
-    "server": "nodemon server",
-    "client": "cd client && npm start"
-  },
-  "keywords": [],
-  "author": "",
   "license": "ISC",
+  "scripts": {
+    "start": "NODE_ENV=production node src/index.js",
+    "dev": "NODE_ENV=development nodemon src/index.js"
+  },
+  "keywords": [
+    "Node.js",
+    "Express.js",
+    "MongoDB",
+    "Mongoose"
+  ],
   "dependencies": {
     "bcryptjs": "^2.4.3",
     "colors": "^1.4.0",
-    "cookie-parser": "^1.4.5",
+    "cookie-parser": "^1.4.6",
     "cors": "^2.8.5",
-    "dotenv": "^8.2.0",
-    "express": "^4.17.1",
-    "express-mongo-sanitize": "^2.0.2",
-    "express-rate-limit": "^5.2.6",
-    "helmet": "^4.4.1",
+    "dotenv": "^16.3.1",
+    "express": "^4.18.2",
+    "express-mongo-sanitize": "^2.2.0",
+    "express-rate-limit": "^7.0.1",
+    "helmet": "^7.0.0",
     "hpp": "^0.2.3",
-    "jsonwebtoken": "^8.5.1",
-    "mongoose": "^5.12.0",
-    "morgan": "^1.10.0",
-    "nodemon": "^2.0.7",
-    "slugify": "^1.4.7",
-    "xss-clean": "^0.1.1"
+    "joi": "^17.10.2",
+    "jsonwebtoken": "^9.0.2",
+    "mongoose": "^8.2.0",
+    "morgan": "^1.10.0"
+  },
+  "devDependencies": {
+    "nodemon": "^3.0.1"
   }
 }
