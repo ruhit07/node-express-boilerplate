@@ -64,6 +64,7 @@ JWT_COOKIE_EXPIRE=1
 src\
  |--config\               # Environment variables and configuration related things
  |--controllers\          # Controller layer
+ |--enums\                # Common enum values
  |--middlewares\          # Custom express middlewares
  |--model\                # Modules
  |--routes\               # Routes
