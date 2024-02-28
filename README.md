@@ -81,7 +81,10 @@ List of available routes:
 `POST /api/v1/auth/login` - login\
 `DELETE /api/v1/auth/logout` - logout\
 `GET /api/v1/auth/me` - retriving his profile\
-`DELETE /api/v1/auth/me` - delete currect user
+`DELETE /api/v1/auth/me` - delete currect user\
+`PUT /api/v1/auth/updatedetails` - update his details\
+`PUT /api/v1/auth/updatepassword` - update his password
+
 
 **User routes**:\
 `GET /api/v1/users` - get all users\
@@ -89,4 +92,4 @@ List of available routes:
 `POST /api/v1/users` - create a user\
 `PUT /api/v1/users/:id` - update user\
 `PATCH /api/v1/users/update-password/:id` - update password\
-`DELETE /api/v1/users/:id` - delete user\
+`DELETE /api/v1/users/:id` - delete user
