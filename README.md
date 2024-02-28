@@ -61,16 +61,15 @@ JWT_COOKIE_EXPIRE=1
 
 ## Project Structure
 ```
-src\
- |--config\               # Environment variables and configuration related things
- |--controllers\          # Controller layer
- |--enums\                # Common enum values
- |--middlewares\          # Custom express middlewares
- |--model\                # Modules
- |--routes\               # Routes
- |--utils\                # Utility classes and functions
- |--validations\          # Request data validation schemas
- |--server.js             # App entry point
+|--config\               # Environment variables and configuration related things
+|--controllers\          # Controller layer
+|--enums\                # Common enum values
+|--middlewares\          # Custom express middlewares
+|--model\                # Modules
+|--routes\               # Routes
+|--utils\                # Utility classes and functions
+|--validations\          # Request data validation schemas
+|--server.js             # App entry point
 ```
 
 ### API Endpoints

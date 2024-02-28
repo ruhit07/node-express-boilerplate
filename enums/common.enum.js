@@ -1,6 +1,6 @@
 const user_role = {
   ADMIN: 'Admin',
-  USER: 'user',
+  USER: 'User',
 };
 
 const env_mode = {

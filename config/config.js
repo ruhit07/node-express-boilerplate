@@ -15,7 +15,7 @@ const configEnvSchema = Joi.object()
 
     JWT_SECRET: Joi.string().required().description('JWT secret key'),
     JWT_EXPIRE: Joi.string().default('1d').required().description('days after which jwt expire'),
-    JWT_COOKIE_EXPIRE: Joi.number().default(7).required().description('days after which cookie expire'),
+    JWT_COOKIE_EXPIRE: Joi.number().default(1).required().description('days after which cookie expire'),
   })
   .unknown();
 
