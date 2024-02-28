@@ -1,7 +1,7 @@
 
 const Joi = require('joi');
 const { user_role } = require('../enums/common.enum');
-const ErrorResponse = require('../../utils/errorResponse');
+const ErrorResponse = require('../utils/errorResponse');
 
 const createUserSchema = (reqBody) => {
   const data = reqBody;
