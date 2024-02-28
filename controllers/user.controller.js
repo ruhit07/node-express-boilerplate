@@ -8,7 +8,7 @@ const asyncHandler = require("../middleware/async");
 exports.getUsers = asyncHandler(async (req, res, next) => {
   let query;
 
-  // Copy query
+  // Copy query g
   const reqQuery = { ...req.query };
 
   // Fields to exclude
