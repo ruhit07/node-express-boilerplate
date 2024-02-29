@@ -3,7 +3,7 @@ const User = require("../models/user.model");
 const asyncHandler = require("../middleware/async");
 const { env_mode } = require("../enums/common.enum");
 const ErrorResponse = require("../utils/errorResponse");
-const { registerUserSchema } = require('../validation/auth.validation');
+const { registerUserSchema, loginUserSchema } = require('../validation/auth.validation');
 
 // @desc    Regester User
 // @route   POST/api/v1/auth/regester
@@ -17,43 +17,39 @@ exports.regester = asyncHandler(async (req, res, next) => {
   // Check for user
   let user = await User.findOne({ email }).select("+password");
   if (user) {
-    return next(new ErrorResponse('Email exists', 401));
+    return next(new ErrorResponse('Email exists', 404));
   }
 
   //  Create User
   user = await User.create({ name, email, password, role });
 
   // Create token and respose and cookie
-  sendTokenResponse(user, 200, 'Registration successfull', res);
+  sendTokenResponse(user, 201, 'Registration successfull', res);
 });
 
 // @desc    Login User
 // @route   POST/api/v1/auth/login
 // @access  Public
 exports.login = asyncHandler(async (req, res, next) => {
-  const { email, password } = req.body;
 
-  // Validate email and password
-  if (!email || !password) {
-    return next(new ErrorResponse("please provide an email and password", 400));
-  }
+  const reqBody = await loginUserSchema(req.body);
+
+  const { email, password } = reqBody;
 
   // Check for user
   const user = await User.findOne({ email }).select("+password");
-
   if (!user) {
-    return next(new ErrorResponse("Invalid", 401));
+    return next(new ErrorResponse("Invalid credentials", 401));
   }
 
   // Check password matches
   const isMatch = await user.matchPassword(password);
-
   if (!isMatch) {
-    return next(new ErrorResponse("Invalid", 401));
+    return next(new ErrorResponse("Invalid credentials", 401));
   }
 
   // Create Token And Respose And Cookie
-  sendTokenResponse(user, 200, res);
+  sendTokenResponse(user, 200, 'Login successfull', res);
 });
 
 // @desc    Log User out / clear Cookie
