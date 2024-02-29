@@ -4,7 +4,7 @@ const Joi = require('joi');
 const ErrorResponse = require('../utils/errorResponse');
 const { user_role } = require('../enums/common.enum');
 
-const registerSchema = (reqBody) => {
+const registerUserSchema = (reqBody) => {
   const data = reqBody;
 
   let dataSchema = {
@@ -22,7 +22,7 @@ const registerSchema = (reqBody) => {
   })
 };
 
-const loginSchema = (reqBody) => {
+const loginUserSchema = (reqBody) => {
   const data = reqBody;
 
   let dataSchema = {
@@ -71,8 +71,8 @@ const updatePasswordSchema = (reqBody) => {
 };
 
 module.exports = {
-  registerSchema,
-  loginSchema,
+  registerUserSchema,
+  loginUserSchema,
   updateUserDetailsSchema,
   updatePasswordSchema
 }

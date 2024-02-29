@@ -1,24 +1,30 @@
-const asyncHandler = require("../middleware/async");
+const config = require('../config/config');
 const User = require("../models/user.model");
+const asyncHandler = require("../middleware/async");
+const { env_mode } = require("../enums/common.enum");
 const ErrorResponse = require("../utils/errorResponse");
+const { registerUserSchema } = require('../validation/auth.validation');
 
 // @desc    Regester User
 // @route   POST/api/v1/auth/regester
 // @access  Public
 exports.regester = asyncHandler(async (req, res, next) => {
-  const { name, email, password, role } = req.body;
+
+  const reqBody = await registerUserSchema(req.body);
+
+  const { name, email, password, role } = reqBody;
+
+  // Check for user
+  let user = await User.findOne({ email }).select("+password");
+  if (user) {
+    return next(new ErrorResponse('Email exists', 401));
+  }
 
   //  Create User
-  const user = await User.find({
-    name,
-    email,
-    password,
-    role
-  });
+  user = await User.create({ name, email, password, role });
 
-  // Create Token And Respose And Cookie
-  sendTokenResponse(user, 200, res);
-
+  // Create token and respose and cookie
+  sendTokenResponse(user, 200, 'Registration successfull', res);
 });
 
 // @desc    Login User
@@ -80,29 +86,30 @@ exports.getMe = asyncHandler(async (req, res, next) => {
 });
 
 
-// Get token from Model ,Create cookie and send Response
-const sendTokenResponse = (user, statusCode, res) => {
+// Get token from Model, Create cookie and send Response
+const sendTokenResponse = (user, statusCode, message, res) => {
 
   // Create Token
   const token = user.getSignedJwtToken();
 
   const options = {
     expires: new Date(
-      Date.now() + process.env.JWT_COOKIE_EXPIRE * 24 * 60 * 60 * 1000
+      Date.now() + config.JWT_COOKIE_EXPIRE * 24 * 60 * 60 * 1000 // 1 day = 24 * 60 * 60 * 1000 ms
     ),
-    httpOnly: true
+    secure: config.NODE_ENV === env_mode.PRODUCTION
   };
 
-  if (process.env.NODE_ENV === "production") {
-    options.secure = true
-  };
 
   res
     .status(statusCode)
-    .cookie("token", token, options)
+    .cookie('token', token, options)
+    .cookie('accessToken', token, { ...options, httpOnly: true })
     .json({
       success: true,
-      message: "User Create Successfully",
-      token
-    })
+      message,
+      data: {
+        user,
+        token
+      }
+    });
 };
