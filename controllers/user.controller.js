@@ -5,11 +5,11 @@ const { updateUserSchema, createUserSchema } = require("../validation/user.valid
 
 // @desc    Get All Users
 // @route   Get/api/v1/users
-//access   private
+// access   private
 exports.getUsers = asyncHandler(async (req, res, next) => {
-  
+
   const { name, email } = req.query;
-      
+
   const reqQuery = {};
   if (name) reqQuery.name = name;
   if (email) reqQuery.email = email;
@@ -27,7 +27,7 @@ exports.getUsers = asyncHandler(async (req, res, next) => {
 
 // @desc    Get Single User
 // @route   Get/api/v1/users/:id
-//access   private
+// access   private
 exports.getUser = asyncHandler(async (req, res, next) => {
   const user = await User.findById(req.params.id);
 
@@ -87,12 +87,12 @@ exports.updateUser = asyncHandler(async (req, res, next) => {
 // @route   Delete/api/v1/users/:id
 // access   private
 exports.deleteUser = asyncHandler(async (req, res, next) => {
-  let user = await User.findByIdAndDelete(req.params.id);
+  const user = await User.findByIdAndDelete(req.params.id);
 
   if (!user) {
     return next(new ErrorResponse(`User Not Found With Id Of ${req.params.id}`, 404));
   }
-  
+
   res.status(200).json({
     success: true,
     message: `User of id ${req.params.id} deleted successfully`,

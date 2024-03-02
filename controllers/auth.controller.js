@@ -52,20 +52,18 @@ exports.login = asyncHandler(async (req, res, next) => {
   sendTokenResponse(user, 200, 'Login successfull', res);
 });
 
-// @desc    Log User out / clear Cookie
+// @desc    Logout User
 // @route   GET/api/v1/auth/logout
 // @access  private
 exports.logout = asyncHandler(async (req, res, next) => {
 
-  res.cookie("token", "none", {
-    expires: new Date(Date.now() + 10 * 1000),
-    httpOnly: true
-  })
+  Object.entries(req.cookies).forEach(([key, value]) => res.clearCookie(key));
 
   res.status(200).json({
     success: true,
+    message: "Logout successfully",
     data: {}
-  })
+  });
 });
 
 
@@ -73,14 +71,43 @@ exports.logout = asyncHandler(async (req, res, next) => {
 // @route   GET/api/v1/auth/me
 // @access  private
 exports.getMe = asyncHandler(async (req, res, next) => {
+  if (!req.user) {
+    return next(new ErrorResponse('Authentication Failed', 401));
+  }
+
   const user = await User.findById(req.user.id);
+  if (!user) {
+    return next(new ErrorResponse(`No User with the id of ${req.user.id}`, 404));
+  }
 
   res.status(200).json({
     success: true,
+    message: "Current logged in user",
     data: user
   })
 });
 
+
+// @desc      Delete current user
+// @route     DELETE /api/v1/auth/me
+// @access    Private
+exports.deleteMe = asyncHandler(async (req, res, next) => {
+
+  if (!req.user) {
+    return next(new ErrorResponse('Authentication Failed', 401));
+  }
+
+  const user = await User.findByIdAndDelete(req.user.id);
+  if (!user) {
+    return next(new ErrorResponse(`User Not Found With Id Of ${req.user.id}`, 404));
+  }
+
+  res.status(200).json({
+    success: true,
+    message: "Delete current user",
+    data: user
+  });
+});
 
 // Get token from Model, Create cookie and send Response
 const sendTokenResponse = (user, statusCode, message, res) => {

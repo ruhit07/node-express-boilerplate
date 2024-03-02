@@ -6,7 +6,7 @@ const {
   login,
   logout,
   getMe,
-  // deleteMe,
+  deleteMe,
   // updateDetails,
   // updatePassword
 } = require("../controllers/auth.controller");
@@ -17,7 +17,7 @@ router.post('/register', regester);
 router.post('/login', login);
 router.delete('/logout', logout);
 router.get('/me', protect, getMe);
-// router.delete('/me', protect, deleteMe);
+router.delete('/me', protect, deleteMe);
 // router.put('/updatedetails', protect, updateDetails);
 // router.put('/updatepassword', protect, updatePassword);
 
