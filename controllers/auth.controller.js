@@ -3,7 +3,7 @@ const User = require("../models/user.model");
 const asyncHandler = require("../middleware/async");
 const { env_mode } = require("../enums/common.enum");
 const ErrorResponse = require("../utils/errorResponse");
-const { registerUserSchema, loginUserSchema } = require('../validation/auth.validation');
+const { registerUserSchema, loginUserSchema, updateUserDetailsSchema, updatePasswordSchema } = require('../validation/auth.validation');
 
 // @desc    Regester User
 // @route   POST/api/v1/auth/regester
@@ -108,6 +108,74 @@ exports.deleteMe = asyncHandler(async (req, res, next) => {
     data: user
   });
 });
+
+
+
+// @desc      Update user details
+// @route     PUT /api/v1/auth/updatedetails
+// @access    Private
+exports.updateDetails = asyncHandler(async (req, res, next) => {
+  if (!req.user) {
+    return next(new ErrorResponse('Authentication Failed', 401));
+  }
+
+  const reqBody = await updateUserDetailsSchema(req.body);
+
+  const existUser = await User.findOne({ email: reqBody.email });
+  if (existUser && existUser.id !== req.user.id) {
+    return next(new ErrorResponse('Email exists', 404));
+  }
+
+  const user = await User.findByIdAndUpdate(req.user.id, reqBody, {
+    new: true,
+    runValidators: true
+  })
+
+  if (!user) {
+    return next(new ErrorResponse(`User not found with Id of ${req.user.id}`, 404));
+  }
+
+  res.status(200).json({
+    success: true,
+    message: "User details updated successfully",
+    data: user
+  });
+});
+
+
+// @desc      Update password
+// @route     PUT /api/v1/auth/updatepassword
+// @access    Private
+exports.updatePassword = asyncHandler(async (req, res, next) => {
+  if (!req.user) {
+    return next(new ErrorResponse('Authentication Failed', 401));
+  }
+
+  const reqBody = await updatePasswordSchema(req.body);
+
+  const { currentPassword, newPassword } = reqBody;
+
+  const user = await User.findById(req.user.id)
+  if (!user) {
+    return next(new ErrorResponse(`No User with the id of ${req.user.id}`, 404));
+  };
+
+  // Check current password
+  if (!(await user.matchPassword(currentPassword))) {
+    return next(new ErrorResponse('Password is incorrect', 401));
+  };
+
+  user.password = newPassword;
+  await user.save();
+
+  res.status(200).json({
+    success: true,
+    message: "Password updated successfully",
+    data: {}
+  });
+
+});
+
 
 // Get token from Model, Create cookie and send Response
 const sendTokenResponse = (user, statusCode, message, res) => {
