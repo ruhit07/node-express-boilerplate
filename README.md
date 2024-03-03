@@ -91,5 +91,4 @@ List of available routes:
 `GET /api/v1/users/:id` - get user\
 `POST /api/v1/users` - create a user\
 `PUT /api/v1/users/:id` - update user\
-`PATCH /api/v1/users/update-password/:id` - update password\
 `DELETE /api/v1/users/:id` - delete user
