@@ -110,7 +110,6 @@ exports.deleteMe = asyncHandler(async (req, res, next) => {
 });
 
 
-
 // @desc      Update user details
 // @route     PUT /api/v1/auth/updatedetails
 // @access    Private
@@ -155,15 +154,16 @@ exports.updatePassword = asyncHandler(async (req, res, next) => {
 
   const { currentPassword, newPassword } = reqBody;
 
-  const user = await User.findById(req.user.id)
+  const user = await User.findOne({ _id: req.user.id }).select("+password");
   if (!user) {
     return next(new ErrorResponse(`No User with the id of ${req.user.id}`, 404));
-  };
+  }
 
   // Check current password
-  if (!(await user.matchPassword(currentPassword))) {
-    return next(new ErrorResponse('Password is incorrect', 401));
-  };
+  const isMatch = await user.matchPassword(currentPassword);
+  if (!isMatch) {
+    return next(new ErrorResponse("Password is incorrect", 404));
+  }
 
   user.password = newPassword;
   await user.save();
@@ -171,7 +171,7 @@ exports.updatePassword = asyncHandler(async (req, res, next) => {
   res.status(200).json({
     success: true,
     message: "Password updated successfully",
-    data: {}
+    data: user
   });
 
 });
